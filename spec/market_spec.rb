@@ -55,4 +55,45 @@ RSpec.describe Market do
       expect(@market.vendors_that_sell(@item4)).to eq([@vendor2])
     end
   end 
+
+  describe '#sorted_item_list' do
+    it 'can return a list of items vendors have in stock sorted alphabetically' do
+      @vendor1.stock(@item1, 35) 
+      @vendor1.stock(@item2, 7)
+      @vendor2.stock(@item4, 50) 
+      @vendor2.stock(@item3, 25)
+      @vendor3.stock(@item1, 65)
+      @market.add_vendor(@vendor1)
+      @market.add_vendor(@vendor2)
+      @market.add_vendor(@vendor3)
+      expect(@market.sorted_item_list).to eq([@item4.name, @item1.name, @item3.name, @item2.name])
+    end
+  end
+
+  describe '#total_inventory' do
+    it 'can return the total number of items vendors have in stock' do
+      @vendor1.stock(@item1, 35) 
+      @vendor1.stock(@item2, 7)
+      @vendor2.stock(@item4, 50) 
+      @vendor2.stock(@item3, 25)
+      @vendor3.stock(@item1, 65)
+      @market.add_vendor(@vendor1)
+      @market.add_vendor(@vendor2)
+      @market.add_vendor(@vendor3)
+      expect(@market.total_inventory).to eq({@item1 => {quantity: 100, vendor: [@vendor1, @vendor2]}, @item2 => {quantity: 7, vendor: [@vendor1]}, @item3 => {quantity: 25, vendor: [@vendor2],}, @item4 => {quantity: 50, vendor: [@vendor2]}})
+    end
+  end
+
+  describe '#overstocked_items' do
+    it 'can return a list of items that are overstocked' do
+      @vendor1.stock(@item1, 35) 
+      @vendor1.stock(@item2, 7)
+      @vendor2.stock(@item4, 50) 
+      @vendor2.stock(@item3, 25)
+      @vendor3.stock(@item1, 65)
+      @market.add_vendor(@vendor1)
+      @market.add_vendor(@vendor2)
+      @market.add_vendor(@vendor3)
+    end
+  end
 end 
